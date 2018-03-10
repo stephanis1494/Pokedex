@@ -1,40 +1,82 @@
 import React, { Component } from 'react';
 import './App.css';
-import data from './pokedex.js';
+import Pokedex from 'pokedex-promise-v2';
+import Results from './components/Results';
 
-class Pokedex extends React.Component {
+const options = {
+  protocol: 'https',
+  versionPath: '/api/v2/',
+  cacheLimit: 100 * 1000, // 100s
+  timeout: 5 * 1000 // 5s
+}
+
+const P = new Pokedex(options);
+
+export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {
+      value: '',
+      name: '',
+      height: '',
+      type: ''
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value})
+  handleChange(e) {
+    this.setState({value: e.target.value});
   }
 
-  handleSubmit(event) {
-    var foo = data.filter(function(data) {
-      return data.name === this.state.value;
-    });
-    console.log(foo.name);
-    console.log(this.state.value);
-    event.preventDefault();
+  handleSubmit(e) {
+    P.getPokemonByName(this.state.value)
+      .then(response => {
+        this.setState({
+          name: response.name,
+          height: response.height,
+          type: response.types[0].type.name
+        })
+        console.log(response);
+        console.log(this.state);
+      })
+      .catch(function(error) {
+        console.log(error);
+    })
+      e.preventDefault();
   }
+
+  returnResults() {
+    if(this.state.name !== '') {
+      return <Results
+        name={this.state.name}
+        type={this.state.type}
+       />
+    }
+  }
+
+
   render() {
     return(
-      <div>
+      <div className='container'>
+        <div className='page-header'>
+          <div className='jumbotron'>
+            <h1>Welcome to Pokedex</h1>
+            <h3>Powered by Pokeapi.co</h3>
+            <p>Please enter a pokemon in the search field below</p>
+          </div>
+        </div>
+      <div className='Search'>
         <form onSubmit={this.handleSubmit}>
           <label>
-            Please enter a Pokemon:
-            <input type='text' name='input' value={this.state.value} onChange={this.handleChange}/>
+            Pokemon:
+            <input type='text' className='btn btn-default' onChange={this.handleChange}/>
+            <button type='submit' className='btn btn-danger'> Search </button>
           </label>
-          <input type='submit' value='submit' />
         </form>
-      </div>
+        <span> {this.returnResults()} </span>
+        </div>
+    </div>
     );
   }
 }
-
-export default Pokedex;
