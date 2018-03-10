@@ -4,10 +4,10 @@ import './Results.css';
 export default class Results extends Component {
   render() {
     return (
-      <div>
-      <h3> {this.props.name} </h3>
-      <p> {this.props.name}, a {this.props.type} Pokemon. </p>
-    </div>
+      <div className='container'>
+          <h3 className='resultHeader'> {this.props.name} </h3>
+          <p className='resultBody'>{this.props.name}, a {this.props.type} Pokemon. </p>
+      </div>
     );
   }
 }

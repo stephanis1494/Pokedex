@@ -61,9 +61,11 @@ export default class App extends Component {
       <div className='container'>
         <div className='page-header'>
           <div className='jumbotron'>
-            <h1>Welcome to Pokedex</h1>
-            <h3>Powered by Pokeapi.co</h3>
-            <p>Please enter a pokemon in the search field below</p>
+            <div className='header'>
+              <h1>Welcome to Pokedex</h1>
+              <h3>Powered by Pokeapi.co</h3>
+              <p>Please enter a pokemon in the search field below</p>
+            </div>
           </div>
         </div>
       <div className='Search'>
