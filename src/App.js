@@ -19,7 +19,8 @@ export default class App extends Component {
       value: '',
       name: '',
       height: '',
-      type: ''
+      type: '',
+      image: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,12 +31,13 @@ export default class App extends Component {
   }
 
   handleSubmit(e) {
-    P.getPokemonByName(this.state.value)
+    P.getPokemonByName(this.state.value.toLowerCase())
       .then(response => {
         this.setState({
           name: response.name,
           height: response.height,
-          type: response.types[0].type.name
+          type: response.types[0].type.name,
+          image: response.sprites.front_default
         })
         console.log(response);
         console.log(this.state);
@@ -51,6 +53,7 @@ export default class App extends Component {
       return <Results
         name={this.state.name}
         type={this.state.type}
+        image={this.state.image}
        />
     }
   }
